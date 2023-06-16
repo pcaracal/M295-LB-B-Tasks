@@ -1,5 +1,5 @@
 {
-  "next_task_id": 21,
+  "next_task_id": 23,
   "tasks": [
     {
       "id": 1,
@@ -140,6 +140,20 @@
       "created_at": 1685787329505,
       "finished_at": null,
       "fk_user_id": 2
+    },
+    {
+      "id": 21,
+      "title": "Pet the cat",
+      "created_at": 1686913619557,
+      "finished_at": null,
+      "fk_user_id": 3
+    },
+    {
+      "id": 22,
+      "title": "Pet the cat",
+      "created_at": 1686913627782,
+      "finished_at": null,
+      "fk_user_id": 1
     }
   ]
 }

@@ -73,29 +73,36 @@ app.get('/tasks', async (req: Request, res: Response) => {
 // Task endpoints
 // POST /tasks: Creates a new task and returns itself as JSON and status 201; status 406 if title is empty
 app.post('/tasks', async (req: Request, res: Response) => {
-  try {
-    let data: Data = await getData();
-    if (!req.body.title) {
-      res.sendStatus(406);
-      logWithTime('POST /tasks not successful, missing title in body');
-    }
-    else {
-      let newTask: Task = {
-        id: data.next_task_id,
-        title: req.body.title,
-        created_at: Date.now(),
-        finished_at: req.body.finished_at || null
+  if (!req.session.user) {
+    res.sendStatus(401);
+    logWithTime('POST /tasks not successful, unauthorized');
+  }
+  else {
+    try {
+      let data: Data = await getData();
+      if (!req.body.title) {
+        res.sendStatus(406);
+        logWithTime('POST /tasks not successful, missing title in body');
       }
-      data.next_task_id++;
-      data.tasks.push(newTask);
+      else {
+        let newTask: Task = {
+          id: data.next_task_id,
+          title: req.body.title,
+          created_at: Date.now(),
+          finished_at: req.body.finished_at || null,
+          fk_user_id: req.session.user.id
+        }
+        data.next_task_id++;
+        data.tasks.push(newTask);
 
-      await setData(data);
-      res.status(201).send(newTask);
-      logWithTime('POST /tasks successful');
+        await setData(data);
+        res.status(201).send(newTask);
+        logWithTime('POST /tasks successful');
+      }
+    } catch (error) {
+      res.sendStatus(500);
+      logWithTime('POST /tasks not successful, server error');
     }
-  } catch (error) {
-    res.sendStatus(500);
-    logWithTime('POST /tasks not successful, server error');
   }
 });
 
