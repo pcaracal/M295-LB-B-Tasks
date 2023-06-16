@@ -4,9 +4,11 @@ import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskByI
 const app: Application = express();
 const port = 3000;
 import session from 'express-session';
+import swaggerUi from 'swagger-ui-express';
 app.use(express.json());
 
-
+import swaggerOut from './swagger-output.json';
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerOut));
 
 // Session endpoints
 app.use(
