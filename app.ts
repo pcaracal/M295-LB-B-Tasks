@@ -193,28 +193,35 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
 
 // DELETE /tasks/{id}: Deletes a task by its ID and status 204 or 404
 app.delete('/tasks/:id', async (req: Request, res: Response) => {
-  try {
-    let data: Data = await getData();
-    if (!req.params.id || isNaN(Number(req.params.id))) {
-      res.sendStatus(400);
-      logWithTime('DELETE /tasks/{id} not successful, missing or invalid ID');
-    }
-    else {
-      if (!findTaskById(Number(req.params.id), data.tasks)) {
-        res.sendStatus(404);
-        logWithTime('DELETE /tasks/{id} not successful, task not found');
+  if (!req.session.user) {
+    res.sendStatus(401);
+    logWithTime('DELETE /tasks/{id} not successful, unauthorized');
+  }
+  else {
+    try {
+      let data: Data = await getData();
+      const userTasks: Task[] = filterTasksByUserId(req.session.user.id, data.tasks);
+      if (!req.params.id || isNaN(Number(req.params.id))) {
+        res.sendStatus(400);
+        logWithTime('DELETE /tasks/{id} not successful, missing or invalid ID');
       }
       else {
-        data.tasks = deleteTaskById(Number(req.params.id), data.tasks);
-        await setData(data);
-        res.sendStatus(204);
-        logWithTime('DELETE /tasks/{id} successful');
+        if (!findTaskById(Number(req.params.id), userTasks)) {
+          res.sendStatus(404);
+          logWithTime('DELETE /tasks/{id} not successful, task not found');
+        }
+        else {
+          data.tasks = deleteTaskById(Number(req.params.id), data.tasks);
+          await setData(data);
+          res.sendStatus(204);
+          logWithTime('DELETE /tasks/{id} successful');
+        }
       }
     }
-  }
-  catch (error) {
-    res.sendStatus(500);
-    logWithTime('DELETE /tasks/{id} not successful, server error');
+    catch (error) {
+      res.sendStatus(500);
+      logWithTime('DELETE /tasks/{id} not successful, server error');
+    }
   }
 });
 

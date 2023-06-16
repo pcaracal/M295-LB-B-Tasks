@@ -72,13 +72,6 @@
       "fk_user_id": 1
     },
     {
-      "id": 11,
-      "title": "Booby, blue-footed",
-      "created_at": 1684746563293,
-      "finished_at": null,
-      "fk_user_id": 1
-    },
-    {
       "id": 12,
       "title": "Phalarope, grey",
       "created_at": 1685622527809,
