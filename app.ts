@@ -58,13 +58,19 @@ app.delete('/logout', async (req: Request, res: Response) => {
 
 // GET /tasks: Returns all tasks as JSON and status 200
 app.get('/tasks', async (req: Request, res: Response) => {
-  try {
-    const data: Data = await getData();
-    res.status(200).send(data.tasks);
-    logWithTime('GET /tasks successful');
-  } catch (error) {
-    res.sendStatus(500);
-    logWithTime('GET /tasks not successful, server error');
+  if (!req.session.user) {
+    res.sendStatus(401);
+    logWithTime('GET /tasks not successful, unauthorized')
+  }
+  else {
+    try {
+      const data: Data = await getData();
+      res.status(200).send(data.tasks);
+      logWithTime('GET /tasks successful');
+    } catch (error) {
+      res.sendStatus(500);
+      logWithTime('GET /tasks not successful, server error');
+    }
   }
 });
 
