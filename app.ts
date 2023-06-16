@@ -31,7 +31,13 @@ declare global {
   }
 }
 
-
+app.use(
+  session({
+    secret: 'secretkey',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 
 
