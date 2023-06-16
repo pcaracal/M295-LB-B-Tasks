@@ -1,6 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
+### User-added
+# Compiled files
+app.js
+app.js.map
+utils.js
+utils.js.map
+
 ### Node ###
 # Logs
 logs
