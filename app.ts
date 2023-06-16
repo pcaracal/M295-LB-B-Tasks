@@ -1,13 +1,11 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
+import { logWithTime } from './utils';
 const app: Application = express();
 const port = 3000;
 const fs = require('fs');
 const session = require('express-session');
 app.use(express.json());
-
-
-
 
 
 // GET /tasks: Returns all tasks as JSON and status 200
@@ -38,9 +36,6 @@ app.put('/tasks:id', async (req: Request, res: Response) => {
 app.delete('/tasks:id', async (req: Request, res: Response) => {
 
 });
-
-
-
 
 
 app.listen(port, () => { console.log(`App is listening to: ${port}`); });
