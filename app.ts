@@ -62,7 +62,6 @@ app.post('/login', async (req: Request, res: Response) => {
   else {
     req.session.user = foundUser;
     res.status(200).send({
-      'authenticated': true,
       'userID': req.session.user.id,
       'email': req.session.user.email
     });
@@ -73,7 +72,6 @@ app.post('/login', async (req: Request, res: Response) => {
 app.get('/verify', async (req: Request, res: Response) => {
   if (req.session.user) {
     res.status(200).send({
-      'authenticated': true,
       'userID': req.session.user.id,
       'email': req.session.user.email
     });
