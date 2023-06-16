@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime, getData, Data, Task, setData, findTaskById } from './utils';
+import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
@@ -73,8 +73,31 @@ app.get('/tasks/:id', async (req: Request, res: Response) => {
 
 
 // PUT /tasks/{id}: Re-creates a task by its ID and returns new values as JSON and status 200 or 404; status 406 if title is empty
-app.put('/tasks:id', async (req: Request, res: Response) => {
+app.put('/tasks/:id', async (req: Request, res: Response) => {
+  try {
+    let data: Data = await getData();
+    if (!req.params.id || isNaN(Number(req.params.id))) res.sendStatus(400);
+    else if (!req.body.title) res.status(406).send('Empty task title');
+    else {
+      let foundTask = findTaskById(Number(req.params.id), data.tasks);
+      if (!foundTask) res.sendStatus(404);
+      else {
+        foundTask.title = req.body.title;
+        foundTask.created_at = req.body.created_at || foundTask.created_at;
+        if (req.body.finished_at !== undefined) foundTask.finished_at = req.body.finished_at;
 
+        data.tasks = replaceTaskById(Number(req.params.id), data.tasks, foundTask);
+
+        await setData(data);
+        res.status(200).send(foundTask);
+        logWithTime('PUT /tasks/{id} successful');
+      }
+    }
+  }
+  catch (error) {
+    res.sendStatus(500);
+    logWithTime('PUT /tasks/{id} not successful, server error');
+  }
 });
 
 
