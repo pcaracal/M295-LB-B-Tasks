@@ -46,8 +46,12 @@ export const findTaskById = (id: number, arr: Task[]) => {
 }
 
 export const replaceTaskById = (id: number, arr: Task[], newtask: Task) => {
-  return arr.map((v) => {
-    if (v.id === id) return newtask;
-    else return v;
+  return arr.map((tsk) => {
+    if (tsk.id === id) return newtask;
+    else return tsk;
   });
+}
+
+export const deleteTaskById = (id: number, arr: Task[]) => {
+  return arr.filter((tsk) => tsk.id != id);
 }

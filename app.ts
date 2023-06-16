@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById } from './utils';
+import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById, deleteTaskById } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
@@ -102,8 +102,24 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
 
 
 // DELETE /tasks/{id}: Deletes a task by its ID and status 204 or 404
-app.delete('/tasks:id', async (req: Request, res: Response) => {
-
+app.delete('/tasks/:id', async (req: Request, res: Response) => {
+  try {
+    let data: Data = await getData();
+    if (!req.params.id || isNaN(Number(req.params.id))) res.sendStatus(400);
+    else {
+      if (!findTaskById(Number(req.params.id), data.tasks)) res.sendStatus(404);
+      else {
+        data.tasks = deleteTaskById(Number(req.params.id), data.tasks);
+        await setData(data);
+        res.sendStatus(204);
+        logWithTime('DELETE /tasks/{id} successful');
+      }
+    }
+  }
+  catch (error) {
+    res.sendStatus(500);
+    logWithTime('PUT /tasks/{id} not successful, server error');
+  }
 });
 
 
