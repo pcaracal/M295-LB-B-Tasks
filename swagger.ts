@@ -32,4 +32,4 @@ const endpointsFiles = ['./app.ts'];
    'endpointsFiles' only the root file where the route starts,
    such as: index.js, app.js, routes.js, ... */
 
-swaggerAutogen(outputFile, endpointsFiles, doc);
+swaggerAutogen()(outputFile, endpointsFiles, doc);

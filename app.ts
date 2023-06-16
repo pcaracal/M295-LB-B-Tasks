@@ -21,6 +21,21 @@ app.use(
 
 // POST /login: status 200 if success, status 401 if invalid credentials
 app.post('/login', async (req: Request, res: Response) => {
+
+
+  // #swagger.description = 'Create session / login'
+  /*
+   #swagger.parameters['credentials'] = {
+    in: 'body',
+    description: 'Body must contain valid user email and password combination for authorization.',
+    required: true,
+    schema: {
+    email: 'example@example.com',
+    password: 'example'
+    }
+  }
+  */
+
   req.session.user = undefined; // Delete old session before new login
   const foundUser = users.find((u) => u.email === req.body.email && u.password === req.body.password);
   if (!foundUser) {
@@ -39,6 +54,8 @@ app.post('/login', async (req: Request, res: Response) => {
 
 // GET /verify: returns email and status 200 if success, 401 if not logged in
 app.get('/verify', async (req: Request, res: Response) => {
+  // #swagger.description = 'Returns if user is authenticated or not'
+
   if (req.session.user) {
     res.status(200).send({
       'userID': req.session.user.id,
@@ -53,6 +70,8 @@ app.get('/verify', async (req: Request, res: Response) => {
 
 // DELETE /logout: deletes session and returns status 204
 app.delete('/logout', async (req: Request, res: Response) => {
+  // #swagger.description = 'Delete session / Logout'
+
   req.session.user = undefined;
   res.sendStatus(204);
   logWithTime('DELETE /logout successful');
@@ -63,6 +82,8 @@ app.delete('/logout', async (req: Request, res: Response) => {
 // Task endpoints
 // GET /tasks: Returns all tasks as JSON and status 200
 app.get('/tasks', async (req: Request, res: Response) => {
+  // #swagger.description = 'Get all tasks'
+
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('GET /tasks not successful, unauthorized');
@@ -82,6 +103,18 @@ app.get('/tasks', async (req: Request, res: Response) => {
 
 // POST /tasks: Creates a new task and returns itself as JSON and status 201; status 406 if title is empty
 app.post('/tasks', async (req: Request, res: Response) => {
+  // #swagger.description = 'Create new task'
+  /*
+   #swagger.parameters['Task'] = {
+    in: 'body',
+    description: 'Body must contain a task title. It can contain finished_at value.',
+    required: true,
+    schema: {
+    title: 'example title',
+    finished_at: 19571361937563
+    }
+  }
+  */
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('POST /tasks not successful, unauthorized');
@@ -118,6 +151,7 @@ app.post('/tasks', async (req: Request, res: Response) => {
 
 // GET /tasks/{id}: Returns a single task by its ID as JSON and status 200 or 404; 400 if no ID is provided
 app.get('/tasks/:id', async (req: Request, res: Response) => {
+  // #swagger.description = 'Get a single task by ID'
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('GET /tasks/{id} not successful, unauthorized');
@@ -151,6 +185,19 @@ app.get('/tasks/:id', async (req: Request, res: Response) => {
 
 // PUT /tasks/{id}: Re-creates a task by its ID and returns new values as JSON and status 200 or 404; status 406 if title is empty
 app.put('/tasks/:id', async (req: Request, res: Response) => {
+  // #swagger.description = 'Replace a task'
+  /*
+   #swagger.parameters['Task'] = {
+    in: 'body',
+    description: 'Body must contain a task title. It can contain finished_at and created_at value.',
+    required: true,
+    schema: {
+    title: 'example title',
+    created_at: 10000000,
+    finished_at: 1000000000
+    }
+  }
+  */
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('PUT /tasks/{id} not successful, unauthorized');
@@ -195,6 +242,7 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
 
 // DELETE /tasks/{id}: Deletes a task by its ID and status 204 or 404
 app.delete('/tasks/:id', async (req: Request, res: Response) => {
+  // #swagger.description = 'Delete a task'
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('DELETE /tasks/{id} not successful, unauthorized');

@@ -26,19 +26,23 @@
   "paths": {
     "/login": {
       "post": {
-        "description": "",
+        "description": "Create session / login",
         "parameters": [
           {
-            "name": "body",
+            "name": "credentials",
             "in": "body",
+            "description": "Body must contain valid user email and password combination for authorization.",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "example@example.com"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "example"
                 }
               }
             }
@@ -56,7 +60,7 @@
     },
     "/verify": {
       "get": {
-        "description": "",
+        "description": "Returns if user is authenticated or not",
         "parameters": [],
         "responses": {
           "200": {
@@ -70,7 +74,7 @@
     },
     "/logout": {
       "delete": {
-        "description": "",
+        "description": "Delete session / Logout",
         "parameters": [],
         "responses": {
           "204": {
@@ -81,7 +85,7 @@
     },
     "/tasks": {
       "get": {
-        "description": "",
+        "description": "Get all tasks",
         "parameters": [],
         "responses": {
           "200": {
@@ -96,19 +100,23 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Create new task",
         "parameters": [
           {
-            "name": "body",
+            "name": "Task",
             "in": "body",
+            "description": "Body must contain a task title. It can contain finished_at value.",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "example title"
                 },
                 "finished_at": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 19571361937563
                 }
               }
             }
@@ -132,7 +140,7 @@
     },
     "/tasks/{id}": {
       "get": {
-        "description": "",
+        "description": "Get a single task by ID",
         "parameters": [
           {
             "name": "id",
@@ -160,7 +168,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Replace a task",
         "parameters": [
           {
             "name": "id",
@@ -169,19 +177,24 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "Task",
             "in": "body",
+            "description": "Body must contain a task title. It can contain finished_at and created_at value.",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "title": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "example title"
                 },
                 "created_at": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 10000000
                 },
                 "finished_at": {
-                  "example": "any"
+                  "type": "number",
+                  "example": 1000000000
                 }
               }
             }
@@ -209,7 +222,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Delete a task",
         "parameters": [
           {
             "name": "id",
