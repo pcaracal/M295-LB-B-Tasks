@@ -63,6 +63,7 @@ app.post('/login', async (req: Request, res: Response) => {
     req.session.user = foundUser;
     res.status(200).send({
       'authenticated': true,
+      'userID': req.session.user.id,
       'email': req.session.user.email
     });
   }
@@ -70,7 +71,15 @@ app.post('/login', async (req: Request, res: Response) => {
 
 // GET /verify: returns email and status 200 if success, 401 if not logged in
 app.get('/verify', async (req: Request, res: Response) => {
-
+  if (req.session.user) {
+    res.status(200).send({
+      'authenticated': true,
+      'userID': req.session.user.id,
+      'email': req.session.user.email
+    });
+  } else {
+    res.sendStatus(401);
+  }
 });
 
 // DELETE /logout: deletes session and returns status 204
