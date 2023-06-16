@@ -156,6 +156,7 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
   else {
     try {
       let data: Data = await getData();
+      const userTasks: Task[] = filterTasksByUserId(req.session.user.id, data.tasks);
       if (!req.params.id || isNaN(Number(req.params.id))) {
         res.sendStatus(400);
         logWithTime('PUT /tasks/{id} not successful, missing or invalid ID');
@@ -165,7 +166,7 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
         logWithTime('PUT /tasks/{id} not successful, missing title in body');
       }
       else {
-        let foundTask = findTaskById(Number(req.params.id), data.tasks);
+        let foundTask = findTaskById(Number(req.params.id), userTasks);
         if (!foundTask) {
           res.sendStatus(404);
           logWithTime('PUT /tasks/{id} not successful, task not found');
