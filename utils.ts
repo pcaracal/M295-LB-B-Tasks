@@ -42,5 +42,5 @@ export const setData = async (data: Data) => {
 }
 
 export const findTaskById = (id: number, arr: Task[]) => {
-    return arr.filter((tsk) => tsk.id === id);
+    return arr.find((tsk) => tsk.id === id);
 }

@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime, getData, Data, Task, setData } from './utils';
+import { logWithTime, getData, Data, Task, setData, findTaskById } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
@@ -46,9 +46,29 @@ app.post('/tasks', async (req: Request, res: Response) => {
 });
 
 
-// GET /tasks/{id}: Returns a single task by its ID as JSON and status 200 or 404
+// GET /tasks/{id}: Returns a single task by its ID as JSON and status 200 or 404; 400 if no ID is provided
 app.get('/tasks/:id', async (req: Request, res: Response) => {
-
+  try {
+    const data: Data = await getData();
+    if (!req.params.id || isNaN(Number(req.params.id))) {
+      res.sendStatus(400);
+      logWithTime('GET /tasks/{id} not successful, invalid ID');
+    }
+    else {
+      const foundTask = findTaskById(Number(req.params.id), data.tasks);
+      if (!foundTask) {
+        res.sendStatus(404);
+        logWithTime('GET /tasks/{id} not successful, not found');
+      }
+      else {
+        res.status(200).send(foundTask);
+        logWithTime('GET /tasks/{id} successful');
+      }
+    }
+  } catch (error) {
+    res.sendStatus(500);
+    logWithTime('GET /tasks/{id} not successful, server error');
+  }
 });
 
 
