@@ -25,13 +25,9 @@ export const logWithTime = (str: string) => {
 
 export const getData = async () => {
   return new Promise<Data>((resolve, reject) => {
-    try {
-      fs.readFile('./data.json', (err: Error, data: Buffer) => {
-        if (err) throw new Error;
-        resolve(JSON.parse(data.toString()));
-      })
-    } catch (error) {
-      reject("Failed to read data");
-    }
+    fs.readFile('./data.json', (err: Error, data: Buffer) => {
+      if (err) reject("Failed to read data");
+      else resolve(JSON.parse(data.toString()));
+    })
   });
 }
