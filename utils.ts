@@ -22,3 +22,16 @@ export const getTime = () => {
 export const logWithTime = (str: string) => {
   console.log(`${getTime()} - ${str}`);
 };
+
+export const getData = async () => {
+  return new Promise<Data>((resolve, reject) => {
+    try {
+      fs.readFile('./data.json', (err: Error, data: Buffer) => {
+        if (err) throw new Error;
+        resolve(JSON.parse(data.toString()));
+      })
+    } catch (error) {
+      reject("Failed to read data");
+    }
+  });
+}
