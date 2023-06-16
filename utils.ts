@@ -5,6 +5,7 @@ export interface Task {
   title: string;
   created_at: number;
   finished_at: number | null;
+  fk_user_id: number;
 }
 export interface Data {
   next_task_id: number;
