@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById, deleteTaskById, users } from './utils';
+import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById, deleteTaskById, users, filterTasksByUserId } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
@@ -65,7 +65,8 @@ app.get('/tasks', async (req: Request, res: Response) => {
   else {
     try {
       const data: Data = await getData();
-      res.status(200).send(data.tasks);
+      const userTasks = filterTasksByUserId(req.session.user.id, data.tasks);
+      res.status(200).send(userTasks);
       logWithTime('GET /tasks successful');
     } catch (error) {
       res.sendStatus(500);
