@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 export interface Task {
   id: number;
@@ -27,39 +27,39 @@ export const logWithTime = (str: string) => {
 export const getData = async () => {
   return new Promise<Data>((resolve, reject) => {
     fs.readFile('./data.json', (err: Error, data: Buffer) => {
-      if (err) reject("Failed to read data");
+      if (err) reject('Failed to read data');
       else resolve(JSON.parse(data.toString()));
-    })
+    });
   });
-}
+};
 
 export const setData = async (data: Data) => {
   return new Promise<void>((resolve, reject) => {
     fs.writeFile('./data.json', JSON.stringify(data), (err: Error) => {
-      if (err) reject("Failed to write data");
+      if (err) reject('Failed to write data');
       else resolve();
-    })
+    });
   });
-}
+};
 
 export const findTaskById = (id: number, arr: Task[]) => {
   return arr.find((tsk) => tsk.id === id);
-}
+};
 
 export const replaceTaskById = (id: number, arr: Task[], newtask: Task) => {
   return arr.map((tsk) => {
     if (tsk.id === id) return newtask;
     else return tsk;
   });
-}
+};
 
 export const deleteTaskById = (id: number, arr: Task[]) => {
   return arr.filter((tsk) => tsk.id != id);
-}
+};
 
 export const filterTasksByUserId = (user_id: number, arr: Task[]) => {
   return arr.filter((tsk) => tsk.fk_user_id === user_id);
-}
+};
 
 
 export interface User {
@@ -73,6 +73,7 @@ export interface Session {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       session: Session;

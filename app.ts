@@ -3,7 +3,7 @@ import express from 'express';
 import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById, deleteTaskById, users, filterTasksByUserId } from './utils';
 const app: Application = express();
 const port = 3000;
-const session = require('express-session');
+import session from 'express-session';
 app.use(express.json());
 
 
@@ -31,7 +31,7 @@ app.post('/login', async (req: Request, res: Response) => {
       'userID': req.session.user.id,
       'email': req.session.user.email
     });
-    logWithTime('POST /login successful')
+    logWithTime('POST /login successful');
   }
 });
 
@@ -42,10 +42,10 @@ app.get('/verify', async (req: Request, res: Response) => {
       'userID': req.session.user.id,
       'email': req.session.user.email
     });
-    logWithTime('GET /verify successful')
+    logWithTime('GET /verify successful');
   } else {
     res.sendStatus(401);
-    logWithTime('GET /verify not successful, not logged in')
+    logWithTime('GET /verify not successful, not logged in');
   }
 });
 
@@ -53,7 +53,7 @@ app.get('/verify', async (req: Request, res: Response) => {
 app.delete('/logout', async (req: Request, res: Response) => {
   req.session.user = undefined;
   res.sendStatus(204);
-  logWithTime('DELETE /logout successful')
+  logWithTime('DELETE /logout successful');
 });
 
 
@@ -63,7 +63,7 @@ app.delete('/logout', async (req: Request, res: Response) => {
 app.get('/tasks', async (req: Request, res: Response) => {
   if (!req.session.user) {
     res.sendStatus(401);
-    logWithTime('GET /tasks not successful, unauthorized')
+    logWithTime('GET /tasks not successful, unauthorized');
   }
   else {
     try {
@@ -86,19 +86,19 @@ app.post('/tasks', async (req: Request, res: Response) => {
   }
   else {
     try {
-      let data: Data = await getData();
+      const data: Data = await getData();
       if (!req.body.title) {
         res.sendStatus(406);
         logWithTime('POST /tasks not successful, missing title in body');
       }
       else {
-        let newTask: Task = {
+        const newTask: Task = {
           id: data.next_task_id,
           title: req.body.title,
           created_at: Date.now(),
           finished_at: req.body.finished_at || null,
           fk_user_id: req.session.user.id
-        }
+        };
         data.next_task_id++;
         data.tasks.push(newTask);
 
@@ -155,7 +155,7 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
   }
   else {
     try {
-      let data: Data = await getData();
+      const data: Data = await getData();
       const userTasks: Task[] = filterTasksByUserId(req.session.user.id, data.tasks);
       if (!req.params.id || isNaN(Number(req.params.id))) {
         res.sendStatus(400);
@@ -166,7 +166,7 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
         logWithTime('PUT /tasks/{id} not successful, missing title in body');
       }
       else {
-        let foundTask = findTaskById(Number(req.params.id), userTasks);
+        const foundTask = findTaskById(Number(req.params.id), userTasks);
         if (!foundTask) {
           res.sendStatus(404);
           logWithTime('PUT /tasks/{id} not successful, task not found');
@@ -199,7 +199,7 @@ app.delete('/tasks/:id', async (req: Request, res: Response) => {
   }
   else {
     try {
-      let data: Data = await getData();
+      const data: Data = await getData();
       const userTasks: Task[] = filterTasksByUserId(req.session.user.id, data.tasks);
       if (!req.params.id || isNaN(Number(req.params.id))) {
         res.sendStatus(400);
