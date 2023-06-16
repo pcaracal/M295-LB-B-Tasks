@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime, getData, Data, Task } from './utils';
+import { logWithTime, getData, Data, Task, setData } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
@@ -22,7 +22,27 @@ app.get('/tasks', async (req: Request, res: Response) => {
 
 // POST /tasks: Creates a new task and returns itself as JSON and status 201; status 406 if title is empty
 app.post('/tasks', async (req: Request, res: Response) => {
+  try {
+    let data: Data = await getData();
+    if (!req.body.title) res.sendStatus(406);
+    else {
+      let newTask: Task = {
+        id: data.next_task_id,
+        title: req.body.title,
+        created_at: Date.now(),
+        finished_at: req.body.finished_at || null
+      }
+      data.next_task_id++;
+      data.tasks.push(newTask);
 
+      await setData(data);
+      res.status(201).send(newTask);
+      logWithTime('POST /tasks successful');
+    }
+  } catch (error) {
+    res.sendStatus(500);
+    logWithTime('POST /tasks not successful, server error');
+  }
 });
 
 
