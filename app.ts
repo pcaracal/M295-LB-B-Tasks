@@ -56,6 +56,9 @@ app.delete('/logout', async (req: Request, res: Response) => {
   logWithTime('DELETE /logout successful')
 });
 
+
+
+// Task endpoints
 // GET /tasks: Returns all tasks as JSON and status 200
 app.get('/tasks', async (req: Request, res: Response) => {
   if (!req.session.user) {
@@ -65,7 +68,7 @@ app.get('/tasks', async (req: Request, res: Response) => {
   else {
     try {
       const data: Data = await getData();
-      const userTasks = filterTasksByUserId(req.session.user.id, data.tasks);
+      const userTasks: Task[] = filterTasksByUserId(req.session.user.id, data.tasks);
       res.status(200).send(userTasks);
       logWithTime('GET /tasks successful');
     } catch (error) {
@@ -75,9 +78,6 @@ app.get('/tasks', async (req: Request, res: Response) => {
   }
 });
 
-
-
-// Task endpoints
 // POST /tasks: Creates a new task and returns itself as JSON and status 201; status 406 if title is empty
 app.post('/tasks', async (req: Request, res: Response) => {
   if (!req.session.user) {
@@ -116,26 +116,33 @@ app.post('/tasks', async (req: Request, res: Response) => {
 
 // GET /tasks/{id}: Returns a single task by its ID as JSON and status 200 or 404; 400 if no ID is provided
 app.get('/tasks/:id', async (req: Request, res: Response) => {
-  try {
-    const data: Data = await getData();
-    if (!req.params.id || isNaN(Number(req.params.id))) {
-      res.sendStatus(400);
-      logWithTime('GET /tasks/{id} not successful, invalid ID');
-    }
-    else {
-      const foundTask = findTaskById(Number(req.params.id), data.tasks);
-      if (!foundTask) {
-        res.sendStatus(404);
-        logWithTime('GET /tasks/{id} not successful, not found');
+  if (!req.session.user) {
+    res.sendStatus(401);
+    logWithTime('GET /tasks/{id} not successful, unauthorized');
+  }
+  else {
+    try {
+      const data: Data = await getData();
+      const userTasks: Task[] = filterTasksByUserId(req.session.user.id, data.tasks);
+      if (!req.params.id || isNaN(Number(req.params.id))) {
+        res.sendStatus(400);
+        logWithTime('GET /tasks/{id} not successful, invalid ID');
       }
       else {
-        res.status(200).send(foundTask);
-        logWithTime('GET /tasks/{id} successful');
+        const foundTask = findTaskById(Number(req.params.id), userTasks);
+        if (!foundTask) {
+          res.sendStatus(404);
+          logWithTime('GET /tasks/{id} not successful, not found');
+        }
+        else {
+          res.status(200).send(foundTask);
+          logWithTime('GET /tasks/{id} successful');
+        }
       }
+    } catch (error) {
+      res.sendStatus(500);
+      logWithTime('GET /tasks/{id} not successful, server error');
     }
-  } catch (error) {
-    res.sendStatus(500);
-    logWithTime('GET /tasks/{id} not successful, server error');
   }
 });
 
