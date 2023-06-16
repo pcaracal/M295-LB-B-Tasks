@@ -3,7 +3,6 @@ import express from 'express';
 import { logWithTime } from './utils';
 const app: Application = express();
 const port = 3000;
-const fs = require('fs');
 const session = require('express-session');
 app.use(express.json());
 
