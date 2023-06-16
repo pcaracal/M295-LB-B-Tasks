@@ -24,7 +24,10 @@ app.get('/tasks', async (req: Request, res: Response) => {
 app.post('/tasks', async (req: Request, res: Response) => {
   try {
     let data: Data = await getData();
-    if (!req.body.title) res.sendStatus(406);
+    if (!req.body.title) {
+      res.sendStatus(406);
+      logWithTime('POST /tasks not successful, missing title in body');
+    }
     else {
       let newTask: Task = {
         id: data.next_task_id,
@@ -76,18 +79,26 @@ app.get('/tasks/:id', async (req: Request, res: Response) => {
 app.put('/tasks/:id', async (req: Request, res: Response) => {
   try {
     let data: Data = await getData();
-    if (!req.params.id || isNaN(Number(req.params.id))) res.sendStatus(400);
-    else if (!req.body.title) res.status(406).send('Empty task title');
+    if (!req.params.id || isNaN(Number(req.params.id))) {
+      res.sendStatus(400);
+      logWithTime('PUT /tasks/{id} not successful, missing or invalid ID');
+    }
+    else if (!req.body.title) {
+      res.status(406).send('Empty task title');
+      logWithTime('PUT /tasks/{id} not successful, missing title in body');
+    }
     else {
       let foundTask = findTaskById(Number(req.params.id), data.tasks);
-      if (!foundTask) res.sendStatus(404);
+      if (!foundTask) {
+        res.sendStatus(404);
+        logWithTime('PUT /tasks/{id} not successful, task not found');
+      }
       else {
         foundTask.title = req.body.title;
         foundTask.created_at = req.body.created_at || foundTask.created_at;
         if (req.body.finished_at !== undefined) foundTask.finished_at = req.body.finished_at;
 
         data.tasks = replaceTaskById(Number(req.params.id), data.tasks, foundTask);
-
         await setData(data);
         res.status(200).send(foundTask);
         logWithTime('PUT /tasks/{id} successful');
@@ -105,9 +116,15 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
 app.delete('/tasks/:id', async (req: Request, res: Response) => {
   try {
     let data: Data = await getData();
-    if (!req.params.id || isNaN(Number(req.params.id))) res.sendStatus(400);
+    if (!req.params.id || isNaN(Number(req.params.id))) {
+      res.sendStatus(400);
+      logWithTime('DELETE /tasks/{id} not successful, missing or invalid ID');
+    }
     else {
-      if (!findTaskById(Number(req.params.id), data.tasks)) res.sendStatus(404);
+      if (!findTaskById(Number(req.params.id), data.tasks)) {
+        res.sendStatus(404);
+        logWithTime('DELETE /tasks/{id} not successful, task not found');
+      }
       else {
         data.tasks = deleteTaskById(Number(req.params.id), data.tasks);
         await setData(data);
@@ -118,7 +135,7 @@ app.delete('/tasks/:id', async (req: Request, res: Response) => {
   }
   catch (error) {
     res.sendStatus(500);
-    logWithTime('PUT /tasks/{id} not successful, server error');
+    logWithTime('DELETE /tasks/{id} not successful, server error');
   }
 });
 
