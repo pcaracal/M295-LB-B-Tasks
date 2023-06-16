@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById, deleteTaskById } from './utils';
+import { logWithTime, getData, Data, Task, setData, findTaskById, replaceTaskById, deleteTaskById, users } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
@@ -8,26 +8,7 @@ app.use(express.json());
 
 
 
-
-interface User {
-  id: number;
-  email: string;
-  password: string;
-}
-
-interface Session {
-  user?: User;
-}
-
-declare global {
-  namespace Express {
-    interface Request {
-      session: Session;
-      sessionID: string;
-    }
-  }
-}
-
+// Session endpoints
 app.use(
   session({
     secret: 'secretkey',
@@ -35,25 +16,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-
-const users: User[] = [
-  {
-    id: 1,
-    email: 'fishcat@cat.com',
-    password: 'm295'
-  },
-  {
-    id: 2,
-    email: 'hashcat@cat.com',
-    password: 'm295'
-  },
-  {
-    id: 3,
-    email: 'sandcat@cat.com',
-    password: 'm295'
-  }
-];
-
 
 // POST /login: status 200 if success, status 401 if invalid credentials
 app.post('/login', async (req: Request, res: Response) => {
@@ -94,16 +56,6 @@ app.delete('/logout', async (req: Request, res: Response) => {
   logWithTime('DELETE /logout successful')
 });
 
-
-
-
-
-
-
-
-
-
-
 // GET /tasks: Returns all tasks as JSON and status 200
 app.get('/tasks', async (req: Request, res: Response) => {
   try {
@@ -117,6 +69,8 @@ app.get('/tasks', async (req: Request, res: Response) => {
 });
 
 
+
+// Task endpoints
 // POST /tasks: Creates a new task and returns itself as JSON and status 201; status 406 if title is empty
 app.post('/tasks', async (req: Request, res: Response) => {
   try {

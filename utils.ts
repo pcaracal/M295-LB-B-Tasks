@@ -55,3 +55,41 @@ export const replaceTaskById = (id: number, arr: Task[], newtask: Task) => {
 export const deleteTaskById = (id: number, arr: Task[]) => {
   return arr.filter((tsk) => tsk.id != id);
 }
+
+
+export interface User {
+  id: number;
+  email: string;
+  password: string;
+}
+
+export interface Session {
+  user?: User;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      session: Session;
+      sessionID: string;
+    }
+  }
+}
+
+export const users: User[] = [
+  {
+    id: 1,
+    email: 'fishcat@cat.com',
+    password: 'm295'
+  },
+  {
+    id: 2,
+    email: 'hashcat@cat.com',
+    password: 'm295'
+  },
+  {
+    id: 3,
+    email: 'sandcat@cat.com',
+    password: 'm295'
+  }
+];
