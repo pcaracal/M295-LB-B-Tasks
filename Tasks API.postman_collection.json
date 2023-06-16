@@ -1,0 +1,380 @@
+{
+	"info": {
+		"_postman_id": "6254ef03-f60a-4378-93ee-aded10e776a3",
+		"name": "Tasks API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27845959"
+	},
+	"item": [
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "POST /login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login fail\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Login success\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"fishcat@cat.com\",\n    \"password\": \"m295\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /verify",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid session\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Valid session\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/verify",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Useless test since it cannot fail",
+									"pm.test(\"Logout success\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tasks",
+			"item": [
+				{
+					"name": "GET /tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Success\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST /tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Success\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"No title provided\", function () {",
+									"    pm.response.to.have.status(406);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"catt3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/tasks",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /tasks/{id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Success\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Not found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/tasks/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /tasks/{id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Success\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Not found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"No title provided\", function () {",
+									"    pm.response.to.have.status(406);",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"pet the cat\",\n    \"created_at\": 813833381,\n    \"finished_at\": 1358317591398\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/tasks/22",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"22"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /tasks/{id}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Not found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Delete success\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/tasks/18",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tasks",
+								"18"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
