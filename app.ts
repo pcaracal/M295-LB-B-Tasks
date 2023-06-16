@@ -16,10 +16,7 @@ interface User {
 }
 
 interface Session {
-  mySessionVarible: string;
-  views: number;
-  authenticated: boolean;
-  user: User;
+  user?: User;
 }
 
 declare global {
@@ -60,7 +57,15 @@ const users: User[] = [
 
 // POST /login: status 200 if success, status 401 if invalid credentials
 app.post('/login', async (req: Request, res: Response) => {
-
+  const foundUser = users.find((u) => u.email === req.body.email && u.password === req.body.password);
+  if (!foundUser) res.sendStatus(401);
+  else {
+    req.session.user = foundUser;
+    res.status(200).send({
+      'authenticated': true,
+      'email': req.session.user.email
+    });
+  }
 });
 
 // GET /verify: returns email and status 200 if success, 401 if not logged in
