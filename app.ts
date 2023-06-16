@@ -39,6 +39,24 @@ app.use(
   })
 );
 
+const users: User[] = [
+  {
+    id: 1,
+    email: 'fishcat@cat.com',
+    password: 'm295'
+  },
+  {
+    id: 2,
+    email: 'hashcat@cat.com',
+    password: 'm295'
+  },
+  {
+    id: 3,
+    email: 'sandcat@cat.com',
+    password: 'm295'
+  }
+];
+
 
 // POST /login: status 200 if success, status 401 if invalid credentials
 app.post('/login', async (req: Request, res: Response) => {
@@ -47,12 +65,12 @@ app.post('/login', async (req: Request, res: Response) => {
 
 // GET /verify: returns email and status 200 if success, 401 if not logged in
 app.get('/verify', async (req: Request, res: Response) => {
-  
+
 });
 
 // DELETE /logout: deletes session and returns status 204
 app.delete('/logout', async (req: Request, res: Response) => {
-  
+
 });
 
 
