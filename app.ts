@@ -40,10 +40,20 @@ app.use(
 );
 
 
+// POST /login: status 200 if success, status 401 if invalid credentials
+app.post('/login', async (req: Request, res: Response) => {
 
+});
 
+// GET /verify: returns email and status 200 if success, 401 if not logged in
+app.get('/verify', async (req: Request, res: Response) => {
+  
+});
 
-
+// DELETE /logout: deletes session and returns status 204
+app.delete('/login', async (req: Request, res: Response) => {
+  
+});
 
 
 
