@@ -57,6 +57,10 @@ export const deleteTaskById = (id: number, arr: Task[]) => {
   return arr.filter((tsk) => tsk.id != id);
 }
 
+export const filterTasksByUserId = (user_id: number, arr: Task[]) => {
+  return arr.filter((tsk) => tsk.fk_user_id === user_id);
+}
+
 
 export interface User {
   id: number;
