@@ -57,14 +57,19 @@ const users: User[] = [
 
 // POST /login: status 200 if success, status 401 if invalid credentials
 app.post('/login', async (req: Request, res: Response) => {
+  req.session.user = undefined; // Delete old session before new login
   const foundUser = users.find((u) => u.email === req.body.email && u.password === req.body.password);
-  if (!foundUser) res.sendStatus(401);
+  if (!foundUser) {
+    res.sendStatus(401);
+    logWithTime('POST /login not successful, invalid credentials');
+  }
   else {
     req.session.user = foundUser;
     res.status(200).send({
       'userID': req.session.user.id,
       'email': req.session.user.email
     });
+    logWithTime('POST /login successful')
   }
 });
 
@@ -75,14 +80,18 @@ app.get('/verify', async (req: Request, res: Response) => {
       'userID': req.session.user.id,
       'email': req.session.user.email
     });
+    logWithTime('GET /verify successful')
   } else {
     res.sendStatus(401);
+    logWithTime('GET /verify not successful, not logged in')
   }
 });
 
 // DELETE /logout: deletes session and returns status 204
 app.delete('/logout', async (req: Request, res: Response) => {
-
+  req.session.user = undefined;
+  res.sendStatus(204);
+  logWithTime('DELETE /logout successful')
 });
 
 
