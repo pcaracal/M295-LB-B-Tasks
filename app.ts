@@ -7,6 +7,48 @@ const session = require('express-session');
 app.use(express.json());
 
 
+
+
+interface User {
+  id: number;
+  email: string;
+  password: string;
+}
+
+interface Session {
+  mySessionVarible: string;
+  views: number;
+  authenticated: boolean;
+  user: User;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      session: Session;
+      sessionID: string;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // GET /tasks: Returns all tasks as JSON and status 200
 app.get('/tasks', async (req: Request, res: Response) => {
   try {
