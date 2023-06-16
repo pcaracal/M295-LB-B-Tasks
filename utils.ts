@@ -1,12 +1,12 @@
 const fs = require('fs');
 
-interface Task {
+export interface Task {
   id: number;
   title: string;
   created_at: number;
   finished_at: number | null;
 }
-interface Data {
+export interface Data {
   next_task_id: number;
   tasks: Task[];
 }
