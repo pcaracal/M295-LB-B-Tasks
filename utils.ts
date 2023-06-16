@@ -40,3 +40,7 @@ export const setData = async (data: Data) => {
     })
   });
 }
+
+export const findTaskById = (id: number, arr: Task[]) => {
+    return arr.filter((tsk) => tsk.id === id);
+}
