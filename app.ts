@@ -51,7 +51,7 @@ app.get('/verify', async (req: Request, res: Response) => {
 });
 
 // DELETE /logout: deletes session and returns status 204
-app.delete('/login', async (req: Request, res: Response) => {
+app.delete('/logout', async (req: Request, res: Response) => {
   
 });
 
