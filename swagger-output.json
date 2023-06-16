@@ -26,7 +26,8 @@
   "paths": {
     "/login": {
       "post": {
-        "description": "Create session / login",
+        "summary": "Create session / login",
+        "description": "",
         "parameters": [
           {
             "name": "credentials",
@@ -60,7 +61,8 @@
     },
     "/verify": {
       "get": {
-        "description": "Returns if user is authenticated or not",
+        "summary": "Returns if user is authenticated or not",
+        "description": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -74,7 +76,8 @@
     },
     "/logout": {
       "delete": {
-        "description": "Delete session / Logout",
+        "summary": "Delete session / Logout",
+        "description": "",
         "parameters": [],
         "responses": {
           "204": {
@@ -85,7 +88,8 @@
     },
     "/tasks": {
       "get": {
-        "description": "Get all tasks",
+        "summary": "Get all tasks",
+        "description": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -100,7 +104,8 @@
         }
       },
       "post": {
-        "description": "Create new task",
+        "summary": "Create new task",
+        "description": "",
         "parameters": [
           {
             "name": "Task",
@@ -140,7 +145,8 @@
     },
     "/tasks/{id}": {
       "get": {
-        "description": "Get a single task by ID",
+        "summary": "Get a single task by ID",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -168,7 +174,8 @@
         }
       },
       "put": {
-        "description": "Replace a task",
+        "summary": "Replace a task",
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -222,7 +229,8 @@
         }
       },
       "delete": {
-        "description": "Delete a task",
+        "summary": "Delete a task",
+        "description": "",
         "parameters": [
           {
             "name": "id",

@@ -23,7 +23,7 @@ app.use(
 app.post('/login', async (req: Request, res: Response) => {
 
 
-  // #swagger.description = 'Create session / login'
+  // #swagger.summary = 'Create session / login'
   /*
    #swagger.parameters['credentials'] = {
     in: 'body',
@@ -54,7 +54,7 @@ app.post('/login', async (req: Request, res: Response) => {
 
 // GET /verify: returns email and status 200 if success, 401 if not logged in
 app.get('/verify', async (req: Request, res: Response) => {
-  // #swagger.description = 'Returns if user is authenticated or not'
+  // #swagger.summary = 'Returns if user is authenticated or not'
 
   if (req.session.user) {
     res.status(200).send({
@@ -70,7 +70,7 @@ app.get('/verify', async (req: Request, res: Response) => {
 
 // DELETE /logout: deletes session and returns status 204
 app.delete('/logout', async (req: Request, res: Response) => {
-  // #swagger.description = 'Delete session / Logout'
+  // #swagger.summary = 'Delete session / Logout'
 
   req.session.user = undefined;
   res.sendStatus(204);
@@ -82,7 +82,7 @@ app.delete('/logout', async (req: Request, res: Response) => {
 // Task endpoints
 // GET /tasks: Returns all tasks as JSON and status 200
 app.get('/tasks', async (req: Request, res: Response) => {
-  // #swagger.description = 'Get all tasks'
+  // #swagger.summary = 'Get all tasks'
 
   if (!req.session.user) {
     res.sendStatus(401);
@@ -103,7 +103,7 @@ app.get('/tasks', async (req: Request, res: Response) => {
 
 // POST /tasks: Creates a new task and returns itself as JSON and status 201; status 406 if title is empty
 app.post('/tasks', async (req: Request, res: Response) => {
-  // #swagger.description = 'Create new task'
+  // #swagger.summary = 'Create new task'
   /*
    #swagger.parameters['Task'] = {
     in: 'body',
@@ -151,7 +151,7 @@ app.post('/tasks', async (req: Request, res: Response) => {
 
 // GET /tasks/{id}: Returns a single task by its ID as JSON and status 200 or 404; 400 if no ID is provided
 app.get('/tasks/:id', async (req: Request, res: Response) => {
-  // #swagger.description = 'Get a single task by ID'
+  // #swagger.summary = 'Get a single task by ID'
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('GET /tasks/{id} not successful, unauthorized');
@@ -185,7 +185,7 @@ app.get('/tasks/:id', async (req: Request, res: Response) => {
 
 // PUT /tasks/{id}: Re-creates a task by its ID and returns new values as JSON and status 200 or 404; status 406 if title is empty
 app.put('/tasks/:id', async (req: Request, res: Response) => {
-  // #swagger.description = 'Replace a task'
+  // #swagger.summary = 'Replace a task'
   /*
    #swagger.parameters['Task'] = {
     in: 'body',
@@ -242,7 +242,7 @@ app.put('/tasks/:id', async (req: Request, res: Response) => {
 
 // DELETE /tasks/{id}: Deletes a task by its ID and status 204 or 404
 app.delete('/tasks/:id', async (req: Request, res: Response) => {
-  // #swagger.description = 'Delete a task'
+  // #swagger.summary = 'Delete a task'
   if (!req.session.user) {
     res.sendStatus(401);
     logWithTime('DELETE /tasks/{id} not successful, unauthorized');
