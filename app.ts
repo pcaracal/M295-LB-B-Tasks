@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import express from 'express';
-import { logWithTime } from './utils';
+import { logWithTime, getData, Data, Task } from './utils';
 const app: Application = express();
 const port = 3000;
 const session = require('express-session');
